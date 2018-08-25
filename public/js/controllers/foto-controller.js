@@ -1,7 +1,9 @@
-angular.module('alurapic').controller('FotoController', function($scope, $http, $routeParams){
+angular.module('alurapic').controller('FotoController', function($scope, recursoFoto, $routeParams, $http){
 
 	$scope.foto = {};
 	$scope.mensagem = '';
+
+
 
 	if($routeParams.fotoId){
 		$http.get('v1/fotos/' + $routeParams.fotoId)
@@ -22,11 +24,9 @@ angular.module('alurapic').controller('FotoController', function($scope, $http, 
 
 		if($scope.foto._id){
 
-			$http.put('v1/fotos/' + $scope.foto._id, $scope.foto)
-			.success(function(){
+			recursoFoto.update({fotoId : $scope.foto._id}, $scope.foto ,function(){
 				$scope.mensagem = "The photo was successfully updated!";
-			})
-			.error(function(erro){
+			}, function(erro){
 				$scope.mensagem = "The photo could not be updated!";
 				console.log(erro);
 			});
