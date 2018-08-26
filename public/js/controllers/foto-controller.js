@@ -1,19 +1,17 @@
-angular.module('alurapic').controller('FotoController', function($scope, recursoFoto, $routeParams, $http){
+angular.module('alurapic').controller('FotoController', function($scope, cadastroDeFotos, recursoFoto, $routeParams){
 
 	$scope.foto = {};
 	$scope.mensagem = '';
 
-
-
 	if($routeParams.fotoId){
-		$http.get('v1/fotos/' + $routeParams.fotoId)
-		.success(function(foto){
+		
+		recursoFoto.get({fotoId : $routeParams.fotoId}, function(foto){
 			$scope.foto = foto;
-		})
-		.error(function(erro){
+		}, function(erro){
 			console.log(erro);
 			$scope.mensagem = 'An error occured during the transaction!';
 		});
+		
 	}
 
 	$scope.submeter = function() {
@@ -22,28 +20,17 @@ angular.module('alurapic').controller('FotoController', function($scope, recurso
 			return;
 		}
 
-		if($scope.foto._id){
-
-			recursoFoto.update({fotoId : $scope.foto._id}, $scope.foto ,function(){
-				$scope.mensagem = "The photo was successfully updated!";
-			}, function(erro){
-				$scope.mensagem = "The photo could not be updated!";
-				console.log(erro);
-			});
-
-		} else {
-			
-			$http.post('v1/fotos', $scope.foto)
-			.success(function(){
+		cadastroDeFotos.cadastrar($scope.foto)
+		.then(function(dados){
+			$scope.mensagem = dados.mensagem;
+			if(dados.inclusao){
 				$scope.foto = {};
-				$scope.mensagem = "The photo was successfully added!";
-			})
-			.error(function(erro){
-				$scope.mensagem = "The photo could not be added!";
-				console.log(erro);
-			});
-
-		}
+			}
+		})
+		.catch(function(dados){
+			$scope.mensagem = dados.mensagem;
+		});
+		
 	};
 
 });
