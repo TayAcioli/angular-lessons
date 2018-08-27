@@ -1,44 +1,36 @@
-angular.module('minhasDiretivas', [])
-.directive('meuPainel', function() {
+angular.module('alurapic').controller('FotoController', function($scope, cadastroDeFotos, recursoFoto, $routeParams){
 
-    var ddo = {};
+	$scope.foto = {};
+	$scope.mensagem = '';
 
-    ddo.restrict = "AE";
-    ddo.transclude = true;
+	if($routeParams.fotoId){
+		
+		recursoFoto.get({fotoId : $routeParams.fotoId}, function(foto){
+			$scope.foto = foto;
+		}, function(erro){
+			console.log(erro);
+			$scope.mensagem = 'An error occured during the transaction!';
+		});
+		
+	}
 
-    ddo.scope = {
-        titulo: '@'
-    };
+	$scope.submeter = function() {
 
-   ddo.templateUrl = 'js/directives/meu-painel.html';        
+		if(!$scope.formulario.$valid){
+			return;
+		}
 
-    return ddo;
-})
-.directive('minhaFoto', function(){
-
-	var ddo = {};
-
-	ddo.restric = "AE";
-	ddo.scope = {
-		titulo : '@',
-		url: '@'
+		cadastroDeFotos.cadastrar($scope.foto)
+		.then(function(dados){
+			$scope.mensagem = dados.mensagem;
+			if(dados.inclusao){
+				$scope.foto = {};
+			}
+		})
+		.catch(function(dados){
+			$scope.mensagem = dados.mensagem;
+		});
+		
 	};
-	ddo.template = '<img class="img-responsive center-block" ng-src="{{url}}" alt="{{titulo}}">';
-
-	return ddo;
-
-})
-.directive('meuBotaoPerigo', function(){
-
-	var ddo  = {};
-
-	ddo.restric = "E";
-	ddo.scope = {
-		nome: '@',
-		acao: '&'
-	};
-	ddo.template = '<button class="btn btn-danger btn-block" ng-click="acao(foto)">{{nome}}</button>';
-
-	return ddo;
 
 });
