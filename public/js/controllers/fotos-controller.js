@@ -3,6 +3,7 @@ angular.module('alurapic').controller('FotosController', function($scope, recurs
     $scope.fotos = [];
     $scope.filtro = '';
     $scope.mensagem = '';
+    $scope.palindromo = '';
 
     recursoFoto.query(function(fotos){
     	$scope.fotos = fotos;
@@ -22,4 +23,22 @@ angular.module('alurapic').controller('FotosController', function($scope, recurs
     	});
 
     };
+
+    $scope.checkPalindrome = function(palindromo){
+
+		if(!$scope.formulario.$valid){
+			return;
+		}
+
+		palindromo = palindromo.replace(/\s/g,'').replace(/[^a-zA-Z ]/g, "").toLowerCase();
+
+		var contrario = palindromo.split("").reverse().join("");
+
+		if(palindromo == contrario){
+			$scope.mensagemPalindromo  = '"' + $scope.palindromo + '" is a palindrome!';
+		}else{
+			$scope.mensagemPalindromo  = '"' + $scope.palindromo + '" is not a palindrome!';
+		}
+
+    }
 });
