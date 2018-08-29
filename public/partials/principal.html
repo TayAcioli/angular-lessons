@@ -11,14 +11,31 @@
                 <span class="input-group-btn">
                     <a href="fotos/new" class="btn btn-primary">New Photo</a>
                 </span>
-                <input ng-model="filtro" ng-model-options="{debounce: 500}" class="form-control" placeholder="filtrar" type="" name="">
+                <input ng-model="filtro.titulo" ng-model-options="{debounce: 500}" class="form-control" placeholder="Filter" type="" name="">
             </div>
         </form>
     </div>
 </div>
 
 <div class="row">
-        
+    <div class="col-md-4">
+        <form novalidate name="formulario" ng-submit="checkPalindrome(palindromo)">
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Palindrome</button>    
+                </span>
+                <input class="form-control" placeholder="Check Palindrome" type="text" ng-model="palindromo" name="palindromo" autocomplete="off" required>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <span ng-show="formulario.$submitted && formulario.palindromo.$error.required" class="form-control alert-danger">
+            Word for check must be informed.
+        </span>
+    </div>
+    <div class="col-md-8">
+        <p class="form-control alert-info" ng-show="mensagemPalindromo.length">{{mensagemPalindromo}}</p>
+    </div>
 </div>
 
 <div class="row">
@@ -28,5 +45,5 @@
         <a class="btn btn-primary btn-block" href="fotos/edit/{{foto._id}}">Edit</a>
         <meu-botao-perigo acao="remover(foto)" nome="Remove"></meu-botao-perigo>
     </meu-painel>
-    <meus-titulos></meus-titulos>
+    <!--<meus-titulos></meus-titulos>-->
 </div>
